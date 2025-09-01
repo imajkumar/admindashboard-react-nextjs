@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { AuthService, type UserData } from "../services/authService";
 
 export interface AuthState {
@@ -20,7 +20,7 @@ export const useAuth = () => {
   const router = useRouter();
 
   // Get user permissions based on role
-  const getUserPermissions = (role: string): string[] => {
+  const getUserPermissions = useCallback((role: string): string[] => {
     const permissionMap: { [key: string]: string[] } = {
       super_admin: [
         // Dashboard
@@ -125,7 +125,7 @@ export const useAuth = () => {
     };
 
     return permissionMap[role] || permissionMap.guest;
-  };
+  }, []);
 
   // Check authentication status
   const checkAuth = useCallback(async () => {
@@ -175,34 +175,37 @@ export const useAuth = () => {
   }, [getUserPermissions]);
 
   // Login function
-  const login = useCallback(async (email: string, password: string) => {
-    try {
-      setAuthState((prev) => ({ ...prev, isLoading: true }));
+  const login = useCallback(
+    async (email: string, password: string) => {
+      try {
+        setAuthState((prev) => ({ ...prev, isLoading: true }));
 
-      const response = await AuthService.login({ email, password });
+        const response = await AuthService.login({ email, password });
 
-      if (response.success && response.data) {
-        const user = response.data.user;
-        const permissions = getUserPermissions(user.role);
+        if (response.success && response.data) {
+          const user = response.data.user;
+          const permissions = getUserPermissions(user.role);
 
-        setAuthState({
-          isAuthenticated: true,
-          user,
-          userPermissions: permissions,
-          isLoading: false,
-        });
+          setAuthState({
+            isAuthenticated: true,
+            user,
+            userPermissions: permissions,
+            isLoading: false,
+          });
 
-        return { success: true };
-      } else {
+          return { success: true };
+        } else {
+          setAuthState((prev) => ({ ...prev, isLoading: false }));
+          return { success: false, message: response.message };
+        }
+      } catch (error) {
+        console.error("Login error:", error);
         setAuthState((prev) => ({ ...prev, isLoading: false }));
-        return { success: false, message: response.message };
+        return { success: false, message: "Login failed" };
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      setAuthState((prev) => ({ ...prev, isLoading: false }));
-      return { success: false, message: "Login failed" };
-    }
-  }, []);
+    },
+    [getUserPermissions],
+  );
 
   // Logout function
   const logout = useCallback(async () => {

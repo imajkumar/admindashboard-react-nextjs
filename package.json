@@ -16,7 +16,7 @@
       "biome format --write",
       "biome check"
     ],
-    "*.{json,md}": [
+    "*.{json}": [
       "biome format --write"
     ]
   },
