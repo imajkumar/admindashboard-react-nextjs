@@ -74,6 +74,10 @@ export const useAuth = () => {
         // Analytics
         "analytics:read",
         "analytics:write",
+        // Email
+        "email:read",
+        "email:write",
+        "email:delete",
         // Settings
         "settings:read",
         "settings:write",
@@ -95,6 +99,9 @@ export const useAuth = () => {
         "ecommerce:write",
         // Analytics
         "analytics:read",
+        // Email
+        "email:read",
+        "email:write",
         // Settings
         "settings:read",
         // Help
