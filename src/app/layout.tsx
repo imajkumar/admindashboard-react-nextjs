@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import ReduxProvider from "../store/ReduxProvider";
 import ThemeProvider from "../contexts/ThemeContext";
 import LanguageProvider from "../contexts/LanguageContext";
 
@@ -18,9 +19,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AntdRegistry>
-          <LanguageProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </LanguageProvider>
+          <ReduxProvider>
+            <LanguageProvider>
+              <ThemeProvider>{children}</ThemeProvider>
+            </LanguageProvider>
+          </ReduxProvider>
         </AntdRegistry>
       </body>
     </html>
