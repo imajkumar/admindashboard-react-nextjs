@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Input, Button, Card, Typography, Layout, message } from "antd";
 import { UserOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
@@ -10,22 +10,45 @@ const { Content } = Layout;
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkExistingAuth = () => {
+      try {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn) {
+          router.push("/dashboard");
+        }
+      } catch (_error) {
+        console.error("Auth check error:", _error);
+      }
+    };
+
+    // Delay to avoid hydration issues
+    const timer = setTimeout(() => {
+      checkExistingAuth();
+      setMounted(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [router]);
 
   const onFinish = async (values: { username: string; password: string }) => {
     setLoading(true);
-    
-    // Simulate login API call
+
     try {
-      // For demo purposes, accept any username/password
-      // In real app, you would validate against your backend
+      // Simulate login API call
       if (values.username && values.password) {
+        // For demo purposes, accept any username/password
+        // In real app, you would validate against your backend
         message.success("Login successful!");
-        
+
         // Store login state (in real app, store JWT token)
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("username", values.username);
-        
+
         // Redirect to dashboard
         setTimeout(() => {
           router.push("/dashboard");
@@ -33,26 +56,44 @@ export default function LoginPage() {
       } else {
         message.error("Please enter username and password");
       }
-    } catch (error) {
+    } catch (_error) {
       message.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Don't render until mounted to avoid hydration issues
+  if (!mounted) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <Layout style={{ minHeight: "100vh", background: "#f0f2f5" }}>
-      <Content style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center",
-        padding: "24px"
-      }}>
-        <Card 
-          style={{ 
-            width: "100%", 
+      <Content
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "24px",
+        }}
+      >
+        <Card
+          style={{
+            width: "100%",
             maxWidth: "400px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
@@ -73,7 +114,9 @@ export default function LoginPage() {
           >
             <Form.Item
               name="username"
-              rules={[{ required: true, message: "Please input your username!" }]}
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
             >
               <Input
                 prefix={<UserOutlined />}
@@ -84,7 +127,9 @@ export default function LoginPage() {
 
             <Form.Item
               name="password"
-              rules={[{ required: true, message: "Please input your password!" }]}
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
@@ -108,9 +153,7 @@ export default function LoginPage() {
           </Form>
 
           <div style={{ textAlign: "center", marginTop: "16px" }}>
-            <Text type="secondary">
-              Demo: Use any username and password
-            </Text>
+            <Text type="secondary">Demo: Use any username and password</Text>
           </div>
         </Card>
       </Content>
