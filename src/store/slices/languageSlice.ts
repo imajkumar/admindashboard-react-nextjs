@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { LanguageConfig } from "../../contexts/LanguageContext";
+import type { LanguageConfig } from "../../config/i18n";
 
 // Types
 export interface LanguageState {
@@ -15,8 +15,36 @@ export interface LanguageState {
 const initialState: LanguageState = {
   currentLanguage: "en",
   availableLanguages: [
-    { code: "en", name: "English", flag: "🇺🇸", direction: "ltr" },
-    { code: "ru", name: "Русский", flag: "🇷🇺", direction: "ltr" },
+    {
+      code: "en",
+      name: "English",
+      flag: "🇺🇸",
+      direction: "ltr",
+      nativeName: "English",
+      dateFormat: "MM/DD/YYYY",
+      timeFormat: "hh:mm A",
+      currency: "USD",
+      numberFormat: {
+        decimal: ".",
+        thousands: ",",
+        precision: 2
+      }
+    },
+    {
+      code: "ru",
+      name: "Русский",
+      flag: "🇷🇺",
+      direction: "ltr",
+      nativeName: "Русский",
+      dateFormat: "DD.MM.YYYY",
+      timeFormat: "HH:mm",
+      currency: "RUB",
+      numberFormat: {
+        decimal: ".",
+        thousands: ",",
+        precision: 2
+      }
+    },
   ],
   fallbackLanguage: "en",
   translations: {},
@@ -33,37 +61,37 @@ const languageSlice = createSlice({
     setLanguage: (state, action: PayloadAction<string>) => {
       state.currentLanguage = action.payload;
     },
-    
+
     // Add available language
     addLanguage: (state, action: PayloadAction<LanguageConfig>) => {
       const existingIndex = state.availableLanguages.findIndex(
-        (lang) => lang.code === action.payload.code
+        (lang: any) => lang.code === action.payload.code
       );
-      
+
       if (existingIndex >= 0) {
         state.availableLanguages[existingIndex] = action.payload;
       } else {
         state.availableLanguages.push(action.payload);
       }
     },
-    
+
     // Remove language
     removeLanguage: (state, action: PayloadAction<string>) => {
       state.availableLanguages = state.availableLanguages.filter(
-        (lang) => lang.code !== action.payload
+        (lang: any) => lang.code !== action.payload
       );
-      
+
       // If removed language was current, fallback to default
       if (state.currentLanguage === action.payload) {
         state.currentLanguage = state.fallbackLanguage;
       }
     },
-    
+
     // Set fallback language
     setFallbackLanguage: (state, action: PayloadAction<string>) => {
       state.fallbackLanguage = action.payload;
     },
-    
+
     // Add translations
     addTranslations: (state, action: PayloadAction<{ language: string; translations: Record<string, string> }>) => {
       const { language, translations } = action.payload;
@@ -72,27 +100,27 @@ const languageSlice = createSlice({
       }
       state.translations[language] = { ...state.translations[language], ...translations };
     },
-    
+
     // Remove translations for a language
     removeTranslations: (state, action: PayloadAction<string>) => {
       delete state.translations[action.payload];
     },
-    
+
     // Set loading state
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    
+
     // Set error
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    
+
     // Clear error
     clearError: (state) => {
       state.error = null;
     },
-    
+
     // Reset language state
     resetLanguage: () => initialState,
   },

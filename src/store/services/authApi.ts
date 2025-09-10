@@ -1,5 +1,7 @@
+// src/store/services/authApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { UserData } from "../../services/authService";
+import { API_CONFIG } from "@/config/constants";
 
 // Types
 export interface LoginRequest {
@@ -40,7 +42,7 @@ export interface LogoutResponse {
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/auth",
+    baseUrl: `${API_CONFIG.BASE_URL}`,
     prepareHeaders: (headers, { getState }) => {
       // Get token from state or localStorage
       const token = localStorage.getItem("authToken");
@@ -55,7 +57,7 @@ export const authApi = createApi({
     // Login endpoint
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: "login",
+        url: "/auth/login",
         method: "POST",
         body: credentials,
       }),

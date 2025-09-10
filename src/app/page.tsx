@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Form, Input, Button, Card, Typography, Layout, message } from "antd";
-import { UserOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Card, Typography, Layout, message, Spin, Checkbox } from "antd";
 import { useRouter } from "next/navigation";
+import { useLoginMutation } from "@/store/services/authApi";
+import { log } from "handlebars/runtime";
+
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -11,6 +13,7 @@ const { Content } = Layout;
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [form] = Form.useForm();
   const router = useRouter();
 
   useEffect(() => {
@@ -35,29 +38,30 @@ export default function LoginPage() {
     return () => clearTimeout(timer);
   }, [router]);
 
+  const [login, { isLoading }] = useLoginMutation();
+
   const onFinish = async (values: { username: string; password: string }) => {
     setLoading(true);
 
     try {
-      // Simulate login API call
-      if (values.username && values.password) {
-        // For demo purposes, accept any username/password
-        // In real app, you would validate against your backend
-        message.success("Login successful!");
-
-        // Store login state (in real app, store JWT token)
+      const response: any = await login(values).unwrap();
+      const token = response.data.token;
+      if (token) {
+        // Store token in localStorage
+        localStorage.setItem("authToken", token);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", values.username);
+
+        message.success(response.data.message || "Login successful!");
 
         // Redirect to dashboard
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 1000);
+        router.push("/dashboard");
       } else {
-        message.error("Please enter username and password");
+        message.error("Invalid response. Token missing.");
       }
-    } catch (_error) {
-      message.error("Login failed. Please try again.");
+    } catch (error: any) {
+      console.error("Login error:", error);
+      const erroMessage = error?.data?.message || "Login failed";
+      message.error(erroMessage);
     } finally {
       setLoading(false);
     }
@@ -74,13 +78,13 @@ export default function LoginPage() {
           height: "100vh",
         }}
       >
-        <div>Loading...</div>
+        <Spin size="small" />
       </div>
     );
   }
 
   return (
-    <Layout style={{ minHeight: "100vh", background: "#f0f2f5" }}>
+    <Layout style={{ minHeight: "100vh", background: "#0255E5" }}>
       <Content
         style={{
           display: "flex",
@@ -98,56 +102,69 @@ export default function LoginPage() {
         >
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <Title level={2} style={{ marginBottom: "8px" }}>
-              Admin Login
+              Queue flow
             </Title>
-            <Text type="secondary">
+            {/* <Text type="secondary">
               Enter your credentials to access the dashboard
-            </Text>
+            </Text> */}
           </div>
 
+
+          <h1 className="text-4xl font-semibold mb-4">Login</h1>
+
           <Form
+            form={form}
             name="login"
+            layout="vertical"
             onFinish={onFinish}
             autoComplete="off"
-            layout="vertical"
-            size="large"
+            requiredMark={false}
+            className='input-form'
           >
             <Form.Item
-              name="username"
+              label="Email address"
+              name="email"
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: 'Please enter your email' },
+                { type: 'email', message: 'Please enter a valid email' }
               ]}
             >
-              <Input
-                prefix={<UserOutlined />}
-                placeholder="Username"
-                autoComplete="username"
-              />
+              <Input placeholder="Enter here" size="large" />
             </Form.Item>
 
             <Form.Item
+              label="Password"
               name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
+              rules={[{ required: true, message: 'Please enter your password' }]}
             >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Password"
-                autoComplete="current-password"
-              />
+              <Input.Password placeholder="Enter here" size="large" />
             </Form.Item>
+
+            <div className="flex justify-between">
+              <Form.Item className="mb-6">
+                <Checkbox
+                // checked={rememberMe}
+                // onChange={e => setRememberMe(e.target.checked)}
+                >
+                  Keep me logged in
+                </Checkbox>
+              </Form.Item>
+
+              <Form.Item className="mb-6">
+                <a href="/forgot-password" className="text-primary">Forgot password?</a>
+              </Form.Item>
+            </div>
 
             <Form.Item>
               <Button
-                type="primary"
+                type="default"
                 htmlType="submit"
-                loading={loading}
-                icon={<LoginOutlined />}
-                style={{ width: "100%" }}
+                block
                 size="large"
+                loading={loading}
+                className="h-12 !bg-secondary  !hover:bg-secondary/80 text-white font-semibold "
               >
-                Log in
+                Login
               </Button>
             </Form.Item>
           </Form>

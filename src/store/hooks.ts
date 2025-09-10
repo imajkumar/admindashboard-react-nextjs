@@ -8,7 +8,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 // Selector helpers for common state access
 export const useAuth = () => useAppSelector((state) => state.auth);
 export const useUser = () => useAppSelector((state) => state.user);
-export const useEmail = () => useAppSelector((state) => state.email);
+// export const useEmail = () => useAppSelector((state) => state.email);
 export const useTheme = () => useAppSelector((state) => state.theme);
 export const useLanguage = () => useAppSelector((state) => state.language);
 export const useUI = () => useAppSelector((state) => state.ui);

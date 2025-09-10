@@ -1,3 +1,4 @@
+// src/store/slices/authSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import type { UserData } from "../../services/authService";
 
@@ -189,7 +190,7 @@ const authSlice = createSlice({
         if (action.payload.success && action.payload.user) {
           state.isAuthenticated = true;
           state.user = action.payload.user;
-          state.userPermissions = action.payload.user.permissions || [];
+          // state.userPermissions = action.payload.user.permissions || [];
           state.refreshToken = action.payload.refreshToken || null;
           state.lastActivity = Date.now();
         } else {
@@ -207,7 +208,7 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(logoutUser.fulfilled, () => initialState)
-      .addCase(logoutUser.rejected, (state, action) => {
+      .addCase(logoutUser.rejected, (state: any, action) => {
         state.isLoading = false;
         state.error = action.payload || "Logout failed";
       });
@@ -222,7 +223,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         if (action.payload.success && action.payload.user) {
           state.user = action.payload.user;
-          state.userPermissions = action.payload.user.permissions || [];
+          // state.userPermissions = action.payload.user.permissions || [];
           state.refreshToken = action.payload.refreshToken || null;
           state.lastActivity = Date.now();
         } else {
@@ -252,7 +253,7 @@ const authSlice = createSlice({
         state.isAuthenticated = action.payload.isAuthenticated;
         if (action.payload.user) {
           state.user = action.payload.user;
-          state.userPermissions = action.payload.user.permissions || [];
+          // state.userPermissions = action.payload.user.permissions || [];
           state.lastActivity = Date.now();
         }
       })

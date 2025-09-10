@@ -21,10 +21,12 @@ export interface UserData {
   email: string;
   firstName: string;
   lastName: string;
+  username: string;
   role: string;
   avatar?: string;
   isActive: boolean;
   lastLogin?: string;
+  department?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -77,6 +79,7 @@ export class AuthService {
               email: credentials.email,
               firstName: credentials.email.split("@")[0],
               lastName: "User",
+              username: credentials.email.split("@")[0],
               role: "admin",
               avatar: "",
               isActive: true,

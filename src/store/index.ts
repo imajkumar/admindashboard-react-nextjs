@@ -7,7 +7,7 @@ import { combineReducers } from "redux";
 // Import slices
 import authSlice from "./slices/authSlice";
 import userSlice from "./slices/userSlice";
-import emailSlice from "./slices/emailSlice";
+// import emailSlice from "./slices/emailSlice";
 import themeSlice from "./slices/themeSlice";
 import languageSlice from "./slices/languageSlice";
 import uiSlice from "./slices/uiSlice";
@@ -16,7 +16,7 @@ import notificationSlice from "./slices/notificationSlice";
 // Import API services
 import { authApi } from "./services/authApi";
 import { userApi } from "./services/userApi";
-import { emailApi } from "./services/emailApi";
+// import { emailApi } from "./services/emailApi";
 import { dashboardApi } from "./services/dashboardApi";
 
 // Root reducer
@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   // Core slices
   auth: authSlice,
   user: userSlice,
-  email: emailSlice,
+  // email: emailSlice,
   theme: themeSlice,
   language: languageSlice,
   ui: uiSlice,
@@ -33,7 +33,7 @@ const rootReducer = combineReducers({
   // API services
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
-  [emailApi.reducerPath]: emailApi.reducer,
+  // [emailApi.reducerPath]: emailApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
 });
 
@@ -59,7 +59,7 @@ export const store = configureStore({
     }).concat([
       authApi.middleware,
       userApi.middleware,
-      emailApi.middleware,
+      // emailApi.middleware,
       dashboardApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",

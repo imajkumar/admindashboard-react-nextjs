@@ -9,9 +9,7 @@ export const APP_CONFIG = {
 
 // API Constants
 export const API_CONFIG = {
-  BASE_URL:
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://fakeapi.platzi.com/en/rest/auth-jwt",
+  BASE_URL: "http://165.22.212.8:8080",
   TIMEOUT: 10000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,

@@ -17,6 +17,7 @@ const LanguageSwitcher: React.FC = () => {
 
   // Create dropdown menu items
   const menuItems = supportedLanguages.map((lang) => ({
+    
     key: lang.code,
     label: (
       <Space>

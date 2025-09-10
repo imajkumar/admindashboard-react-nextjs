@@ -1,4 +1,8 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 
 :root {
   --background: #ffffff;
@@ -24,3 +28,40 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+
+/* inputs  */
+.input-form .ant-form-item .ant-input,
+.input-form .ant-select-selector,
+.input-form .ant-picker,
+.add-points .ant-input {
+  height: 48px !important;
+}
+
+.input-form .ant-form-item .custom-textarea.ant-input {
+  height: 100px !important;
+}
+
+
+.ant-input-affix-wrapper {
+  padding: 0 12px !important;
+}
+
+/* table*/
+/* .custom-table .ant-table-thead>tr>th {
+  background-color: #E6EEFC;
+  color: black;
+  font-weight: 600;
+}
+
+.custom-table .ant-table-tbody>tr>td {
+  color: #515A63;
+} */
+
+/* scroll bar  */
+/* .scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+} */
+

@@ -1,4 +1,5 @@
 // Internationalization Configuration
+// 
 export interface LanguageConfig {
   code: string;
   name: string;
@@ -37,20 +38,21 @@ export const SUPPORTED_LANGUAGES: LanguageConfig[] = [
     },
   },
   {
-    code: "ru",
-    name: "Russian",
-    nativeName: "Русский",
-    flag: "🇷🇺",
+    code: "fr",
+    name: "French",
+    nativeName: "Français",
+    flag: "🇫🇷",
     direction: "ltr",
-    dateFormat: "DD.MM.YYYY",
+    dateFormat: "DD/MM/YYYY",
     timeFormat: "HH:mm:ss",
-    currency: "RUB",
+    currency: "EUR",
     numberFormat: {
       decimal: ",",
       thousands: " ",
       precision: 2,
     },
-  },
+  }
+
 ];
 
 // Default Language

@@ -31,7 +31,7 @@ const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
         );
       })
       .map((module) => {
-        const menuItem: MenuProps["items"][0] = {
+        const menuItem: NonNullable<MenuProps["items"]>[number] = {
           key: module.path,
           icon: getIconComponent(module.icon),
           label: collapsed ? undefined : module.name,
@@ -40,7 +40,7 @@ const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
 
         // Add sub-modules if they exist
         if (module.subModules && module.subModules.length > 0) {
-          menuItem.children = convertModulesToMenuItems(module.subModules);
+          ( menuItem as any ).children = convertModulesToMenuItems(module.subModules);
         }
 
         return menuItem;
