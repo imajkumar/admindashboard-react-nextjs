@@ -48,7 +48,7 @@ export default function LoginPage() {
 
   const [login] = useLoginMutation();
 
-  const onFinish = async (values: { username: string; password: string }) => {
+  const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
 
     try {

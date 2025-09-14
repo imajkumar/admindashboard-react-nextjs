@@ -5,7 +5,7 @@ import type { UserData } from "../../services/authService";
 
 // Types
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
