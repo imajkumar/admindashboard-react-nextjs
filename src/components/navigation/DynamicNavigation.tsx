@@ -1,8 +1,8 @@
 "use client";
 
-import type React from "react";
 import { Menu, type MenuProps } from "antd";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import type React from "react";
 import { APP_MODULES, type ModuleConfig } from "../../config/modules";
 import { useAuth } from "../../hooks/useAuth";
 import { getIconComponent } from "../../utils/iconUtils";
@@ -40,7 +40,8 @@ const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
 
         // Add sub-modules if they exist
         if (module.subModules && module.subModules.length > 0) {
-          ( menuItem as any ).children = convertModulesToMenuItems(module.subModules);
+          (menuItem as MenuProps["items"][0]).children =
+            convertModulesToMenuItems(module.subModules);
         }
 
         return menuItem;

@@ -1,10 +1,10 @@
+import { type ApiResponse, apiRequest } from "../config/axios";
 import {
   API_ENDPOINTS,
   BaseApiService,
   type ListParams,
   type PaginatedResponse,
 } from "./api";
-import { type ApiResponse, apiRequest } from "../config/axios";
 import type { UserData } from "./authService";
 
 // User types

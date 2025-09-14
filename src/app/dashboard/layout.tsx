@@ -1,58 +1,61 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
-  Layout,
-  Menu,
-  Button,
-  Card,
-  Row,
-  Col,
-  Typography,
-  Avatar,
-  Space,
-  Statistic,
-  Table,
-  Tag,
-  Dropdown,
-  message,
-  Spin,
-  Tooltip,
-} from "antd";
-import { CalendarDays, Key, ArrowDownUp, Monitor, User2, CrownIcon, FileText, Video, OctagonAlert } from "lucide-react";
-import {
-  DashboardOutlined,
-  UserOutlined,
-  SettingOutlined,
-  LogoutOutlined,
   BellOutlined,
+  DashboardOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-
+  SettingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Layout,
+  Menu,
+  message,
+  Space,
+  Spin,
+  Typography,
+} from "antd";
+import dayjs from "dayjs";
+import {
+  ArrowDownUp,
+  CalendarDays,
+  CrownIcon,
+  FileText,
+  Monitor,
+  OctagonAlert,
+  Video,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useTheme } from "../../contexts/ThemeContext";
-import { useLanguage } from "../../contexts/LanguageContext";
+import { useEffect, useState } from "react";
 import LanguageSwitcher from "../../components/navigation/LanguageSwitcher";
-import dayjs from "dayjs";
+// import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./style.css";
-import logo from "../../assets/imgs/Logo.png";
 import { usePathname } from "next/navigation";
-import DashboardData from "./dashbordData";
+import logo from "../../assets/imgs/Logo.png";
+
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
-
-export default function DashboardLayout({children}: {children: React.ReactNode}) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [collapsed, setCollapsed] = useState(false);
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
-  const { themeMode, toggleTheme } = useTheme();
+  // const { themeMode, toggleTheme } = useTheme();
   const { t } = useLanguage();
-  const currentDate = dayjs().format('MMM, D, YYYY')
+  const currentDate = dayjs().format("MMM, D, YYYY");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -145,7 +148,6 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
       icon: <SettingOutlined />,
       label: t("settings", "common"),
     },
-
   ];
 
   const userMenuItems = [
@@ -166,7 +168,6 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
       onClick: handleLogout,
     },
   ];
-
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -193,7 +194,10 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
 
   return (
     <Layout style={{ minHeight: "100vh", overflow: "hidden" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
         width={220}
         className="!bg-neutral sidebar-menu"
         style={{ overflow: "auto", height: "100vh", scrollbarWidth: "none" }}
@@ -284,7 +288,6 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
           className="bg-neutral/10"
         >
           {children}
-
         </Content>
       </Layout>
     </Layout>

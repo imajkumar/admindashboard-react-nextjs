@@ -3,10 +3,10 @@
 import type React from "react";
 import {
   createContext,
-  useContext,
-  useState,
-  useEffect,
   type ReactNode,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 import {
   detectLanguage,
@@ -69,7 +69,6 @@ const translations: {
       service: "Service management",
       video: "Video management",
       report: "Report management",
-
     },
     dashboard: {
       overview: "Overview",
@@ -199,7 +198,6 @@ const translations: {
       service: "Gestion des services",
       video: "Gestion des vidéos",
       report: "Gestion des rapports",
-
     },
     dashboard: {
       overview: "Aperçu",
@@ -250,21 +248,27 @@ const translations: {
       select_department: "Sélectionnez un département",
       select_status: "Sélectionnez un statut",
       username_required: "Le nom d'utilisateur est requis",
-      username_min_length: "Le nom d'utilisateur doit contenir au moins 3 caractères",
-      username_max_length: "Le nom d'utilisateur ne doit pas dépasser 30 caractères",
-      username_pattern: "Le nom d'utilisateur peut contenir uniquement des lettres, chiffres et des underscores",
+      username_min_length:
+        "Le nom d'utilisateur doit contenir au moins 3 caractères",
+      username_max_length:
+        "Le nom d'utilisateur ne doit pas dépasser 30 caractères",
+      username_pattern:
+        "Le nom d'utilisateur peut contenir uniquement des lettres, chiffres et des underscores",
       email_required: "L'email est requis",
       email_invalid: "Veuillez entrer un email valide",
       password_required: "Le mot de passe est requis",
-      password_min_length: "Le mot de passe doit contenir au moins 8 caractères",
+      password_min_length:
+        "Le mot de passe doit contenir au moins 8 caractères",
       confirm_password_required: "Veuillez confirmer le mot de passe",
       passwords_not_match: "Les mots de passe ne correspondent pas",
       first_name_required: "Le prénom est requis",
       first_name_min_length: "Le prénom doit contenir au moins 2 caractères",
       first_name_max_length: "Le prénom ne doit pas dépasser 50 caractères",
       last_name_required: "Le nom de famille est requis",
-      last_name_min_length: "Le nom de famille doit contenir au moins 2 caractères",
-      last_name_max_length: "Le nom de famille ne doit pas dépasser 50 caractères",
+      last_name_min_length:
+        "Le nom de famille doit contenir au moins 2 caractères",
+      last_name_max_length:
+        "Le nom de famille ne doit pas dépasser 50 caractères",
       phone_invalid: "Veuillez entrer un numéro de téléphone valide",
       role_required: "Le rôle est requis",
       status_required: "Le statut est requis",
@@ -295,8 +299,7 @@ const translations: {
       manage_products: "Gérer les produits",
       add_product: "Ajouter un produit",
     },
-  }
-
+  },
 };
 
 interface LanguageProviderProps {
@@ -310,7 +313,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   const [currentLanguageConfig, setCurrentLanguageConfig] =
     useState<LanguageConfig>(
       SUPPORTED_LANGUAGES.find((lang) => lang.code === "en") ||
-      SUPPORTED_LANGUAGES[0],
+        SUPPORTED_LANGUAGES[0],
     );
 
   // Initialize language on mount

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { LanguageConfig } from "../../config/i18n";
 
 // Types
@@ -27,8 +27,8 @@ const initialState: LanguageState = {
       numberFormat: {
         decimal: ".",
         thousands: ",",
-        precision: 2
-      }
+        precision: 2,
+      },
     },
     {
       code: "ru",
@@ -42,8 +42,8 @@ const initialState: LanguageState = {
       numberFormat: {
         decimal: ".",
         thousands: ",",
-        precision: 2
-      }
+        precision: 2,
+      },
     },
   ],
   fallbackLanguage: "en",
@@ -65,7 +65,7 @@ const languageSlice = createSlice({
     // Add available language
     addLanguage: (state, action: PayloadAction<LanguageConfig>) => {
       const existingIndex = state.availableLanguages.findIndex(
-        (lang: any) => lang.code === action.payload.code
+        (lang: any) => lang.code === action.payload.code,
       );
 
       if (existingIndex >= 0) {
@@ -78,7 +78,7 @@ const languageSlice = createSlice({
     // Remove language
     removeLanguage: (state, action: PayloadAction<string>) => {
       state.availableLanguages = state.availableLanguages.filter(
-        (lang: any) => lang.code !== action.payload
+        (lang: any) => lang.code !== action.payload,
       );
 
       // If removed language was current, fallback to default
@@ -93,12 +93,21 @@ const languageSlice = createSlice({
     },
 
     // Add translations
-    addTranslations: (state, action: PayloadAction<{ language: string; translations: Record<string, string> }>) => {
+    addTranslations: (
+      state,
+      action: PayloadAction<{
+        language: string;
+        translations: Record<string, string>;
+      }>,
+    ) => {
       const { language, translations } = action.payload;
       if (!state.translations[language]) {
         state.translations[language] = {};
       }
-      state.translations[language] = { ...state.translations[language], ...translations };
+      state.translations[language] = {
+        ...state.translations[language],
+        ...translations,
+      };
     },
 
     // Remove translations for a language
@@ -144,10 +153,17 @@ export const {
 export default languageSlice.reducer;
 
 // Export selectors
-export const selectLanguage = (state: { language: LanguageState }) => state.language;
-export const selectCurrentLanguage = (state: { language: LanguageState }) => state.language.currentLanguage;
-export const selectAvailableLanguages = (state: { language: LanguageState }) => state.language.availableLanguages;
-export const selectFallbackLanguage = (state: { language: LanguageState }) => state.language.fallbackLanguage;
-export const selectTranslations = (state: { language: LanguageState }) => state.language.translations;
-export const selectLanguageLoading = (state: { language: LanguageState }) => state.language.isLoading;
-export const selectLanguageError = (state: { language: LanguageState }) => state.language.error;
+export const selectLanguage = (state: { language: LanguageState }) =>
+  state.language;
+export const selectCurrentLanguage = (state: { language: LanguageState }) =>
+  state.language.currentLanguage;
+export const selectAvailableLanguages = (state: { language: LanguageState }) =>
+  state.language.availableLanguages;
+export const selectFallbackLanguage = (state: { language: LanguageState }) =>
+  state.language.fallbackLanguage;
+export const selectTranslations = (state: { language: LanguageState }) =>
+  state.language.translations;
+export const selectLanguageLoading = (state: { language: LanguageState }) =>
+  state.language.isLoading;
+export const selectLanguageError = (state: { language: LanguageState }) =>
+  state.language.error;

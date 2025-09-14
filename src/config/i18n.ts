@@ -1,5 +1,5 @@
 // Internationalization Configuration
-// 
+//
 export interface LanguageConfig {
   code: string;
   name: string;
@@ -51,8 +51,7 @@ export const SUPPORTED_LANGUAGES: LanguageConfig[] = [
       thousands: " ",
       precision: 2,
     },
-  }
-
+  },
 ];
 
 // Default Language

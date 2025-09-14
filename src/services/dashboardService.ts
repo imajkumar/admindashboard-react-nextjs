@@ -1,4 +1,4 @@
-import { apiRequest, ApiResponse } from "../config/axios";
+import { type ApiResponse, apiRequest } from "../config/axios";
 import { API_ENDPOINTS } from "./api";
 
 // Dashboard types
@@ -60,7 +60,7 @@ export interface DashboardFilters {
 export class DashboardService {
   // Get dashboard statistics
   async getStats(
-    filters?: DashboardFilters,
+    _filters?: DashboardFilters,
   ): Promise<ApiResponse<DashboardStats>> {
     // Simulate API call with mock data
     await new Promise((resolve) => setTimeout(resolve, 600));
@@ -86,7 +86,7 @@ export class DashboardService {
   // Get chart data
   async getChartData(
     chartType: string,
-    filters?: DashboardFilters,
+    _filters?: DashboardFilters,
   ): Promise<ApiResponse<ChartData>> {
     // Simulate API call with mock data
     await new Promise((resolve) => setTimeout(resolve, 500));

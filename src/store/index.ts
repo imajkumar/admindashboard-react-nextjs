@@ -1,23 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
-
-// Import slices
-import authSlice from "./slices/authSlice";
-import userSlice from "./slices/userSlice";
-// import emailSlice from "./slices/emailSlice";
-import themeSlice from "./slices/themeSlice";
-import languageSlice from "./slices/languageSlice";
-import uiSlice from "./slices/uiSlice";
-import notificationSlice from "./slices/notificationSlice";
-
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 // Import API services
 import { authApi } from "./services/authApi";
-import { userApi } from "./services/userApi";
 // import { emailApi } from "./services/emailApi";
 import { dashboardApi } from "./services/dashboardApi";
+import { userApi } from "./services/userApi";
+// Import slices
+import authSlice from "./slices/authSlice";
+import languageSlice from "./slices/languageSlice";
+import notificationSlice from "./slices/notificationSlice";
+// import emailSlice from "./slices/emailSlice";
+import themeSlice from "./slices/themeSlice";
+import uiSlice from "./slices/uiSlice";
+import userSlice from "./slices/userSlice";
 
 // Root reducer
 const rootReducer = combineReducers({
@@ -29,7 +27,7 @@ const rootReducer = combineReducers({
   language: languageSlice,
   ui: uiSlice,
   notification: notificationSlice,
-  
+
   // API services
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,

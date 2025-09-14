@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Form, Input, Button, Card, Typography, Layout, message, Spin, Checkbox } from "antd";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  Layout,
+  message,
+  Spin,
+  Typography,
+} from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useLoginMutation } from "@/store/services/authApi";
-import { log } from "handlebars/runtime";
-
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -38,13 +46,13 @@ export default function LoginPage() {
     return () => clearTimeout(timer);
   }, [router]);
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const onFinish = async (values: { username: string; password: string }) => {
     setLoading(true);
 
     try {
-      const response: any = await login(values).unwrap();
+      const response = await login(values).unwrap();
       const token = response.data.token;
       if (token) {
         // Store token in localStorage
@@ -58,10 +66,10 @@ export default function LoginPage() {
       } else {
         message.error("Invalid response. Token missing.");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Login error:", error);
-      const erroMessage = error?.data?.message || "Login failed";
-      message.error(erroMessage);
+      const errorMessage = (error as any)?.data?.message || "Login failed";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -109,7 +117,6 @@ export default function LoginPage() {
             </Text> */}
           </div>
 
-
           <h1 className="text-4xl font-semibold mb-4">Login</h1>
 
           <Form
@@ -119,14 +126,14 @@ export default function LoginPage() {
             onFinish={onFinish}
             autoComplete="off"
             requiredMark={false}
-            className='input-form'
+            className="input-form"
           >
             <Form.Item
               label="Email address"
               name="email"
               rules={[
-                { required: true, message: 'Please enter your email' },
-                { type: 'email', message: 'Please enter a valid email' }
+                { required: true, message: "Please enter your email" },
+                { type: "email", message: "Please enter a valid email" },
               ]}
             >
               <Input placeholder="Enter here" size="large" />
@@ -135,7 +142,9 @@ export default function LoginPage() {
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: 'Please enter your password' }]}
+              rules={[
+                { required: true, message: "Please enter your password" },
+              ]}
             >
               <Input.Password placeholder="Enter here" size="large" />
             </Form.Item>
@@ -151,7 +160,9 @@ export default function LoginPage() {
               </Form.Item>
 
               <Form.Item className="mb-6">
-                <a href="/forgot-password" className="text-primary">Forgot password?</a>
+                <a href="/forgot-password" className="text-primary">
+                  Forgot password?
+                </a>
               </Form.Item>
             </div>
 

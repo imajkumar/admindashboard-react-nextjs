@@ -1,11 +1,7 @@
 "use client";
 
-import { Input, Button, Switch } from "antd";
-import {
-  EyeOutlined,
-  EditOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Input, Switch } from "antd";
 import { useState } from "react";
 
 const roles = [
@@ -19,7 +15,7 @@ export default function Roles() {
   const [search, setSearch] = useState("");
 
   const filteredRoles = roles.filter((role) =>
-    role.name.toLowerCase().includes(search.toLowerCase())
+    role.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (

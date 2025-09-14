@@ -1,8 +1,8 @@
 "use client";
 
-import type React from "react";
-import { Dropdown, Button, Space, Typography } from "antd";
 import { GlobalOutlined } from "@ant-design/icons";
+// import type React from "react";
+import { Button, Dropdown, Space, Typography } from "antd";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 const { Text } = Typography;
@@ -17,7 +17,6 @@ const LanguageSwitcher: React.FC = () => {
 
   // Create dropdown menu items
   const menuItems = supportedLanguages.map((lang) => ({
-    
     key: lang.code,
     label: (
       <Space>

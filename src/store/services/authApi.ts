@@ -1,7 +1,7 @@
 // src/store/services/authApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { UserData } from "../../services/authService";
 import { API_CONFIG } from "@/config/constants";
+import type { UserData } from "../../services/authService";
 
 // Types
 export interface LoginRequest {
@@ -63,7 +63,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
-    
+
     // Logout endpoint
     logout: builder.mutation<LogoutResponse, void>({
       query: () => ({
@@ -72,7 +72,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth", "User"],
     }),
-    
+
     // Refresh token endpoint
     refreshToken: builder.mutation<RefreshTokenResponse, RefreshTokenRequest>({
       query: (refreshData) => ({
@@ -82,19 +82,19 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
-    
+
     // Check authentication status
     checkAuth: builder.query<AuthCheckResponse, void>({
       query: () => "me",
       providesTags: ["Auth"],
     }),
-    
+
     // Get current user profile
     getProfile: builder.query<UserData, void>({
       query: () => "profile",
       providesTags: ["User"],
     }),
-    
+
     // Update user profile
     updateProfile: builder.mutation<UserData, Partial<UserData>>({
       query: (updates) => ({
@@ -104,7 +104,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
-    
+
     // Change password
     changePassword: builder.mutation<
       { success: boolean; message?: string },
@@ -116,7 +116,7 @@ export const authApi = createApi({
         body: passwordData,
       }),
     }),
-    
+
     // Request password reset
     requestPasswordReset: builder.mutation<
       { success: boolean; message?: string },
@@ -128,7 +128,7 @@ export const authApi = createApi({
         body: emailData,
       }),
     }),
-    
+
     // Reset password with token
     resetPassword: builder.mutation<
       { success: boolean; message?: string },
@@ -140,7 +140,7 @@ export const authApi = createApi({
         body: resetData,
       }),
     }),
-    
+
     // Verify email
     verifyEmail: builder.mutation<
       { success: boolean; message?: string },
@@ -153,7 +153,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
-    
+
     // Resend verification email
     resendVerification: builder.mutation<
       { success: boolean; message?: string },

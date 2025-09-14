@@ -118,37 +118,55 @@ export const dashboardApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Dashboard", "DashboardStats", "DashboardCharts", "RecentActivity", "SystemHealth"],
+  tagTypes: [
+    "Dashboard",
+    "DashboardStats",
+    "DashboardCharts",
+    "RecentActivity",
+    "SystemHealth",
+  ],
   endpoints: (builder) => ({
     // Get dashboard statistics
     getDashboardStats: builder.query<DashboardStats, void>({
       query: () => "stats",
       providesTags: ["DashboardStats"],
     }),
-    
+
     // Get dashboard charts
-    getDashboardCharts: builder.query<DashboardChart[], { period?: string; refresh?: boolean }>({
+    getDashboardCharts: builder.query<
+      DashboardChart[],
+      { period?: string; refresh?: boolean }
+    >({
       query: (params) => {
         const searchParams = new URLSearchParams();
         if (params.period) searchParams.append("period", params.period);
-        if (params.refresh) searchParams.append("refresh", params.refresh.toString());
+        if (params.refresh)
+          searchParams.append("refresh", params.refresh.toString());
         return `charts?${searchParams.toString()}`;
       },
       providesTags: ["DashboardCharts"],
     }),
-    
+
     // Get specific chart
-    getChart: builder.query<DashboardChart, { chartId: string; period?: string }>({
+    getChart: builder.query<
+      DashboardChart,
+      { chartId: string; period?: string }
+    >({
       query: ({ chartId, period }) => {
         const searchParams = new URLSearchParams();
         if (period) searchParams.append("period", period);
         return `charts/${chartId}?${searchParams.toString()}`;
       },
-      providesTags: (result, error, { chartId }) => [{ type: "DashboardCharts", id: chartId }],
+      providesTags: (_result, _error, { chartId }) => [
+        { type: "DashboardCharts", id: chartId },
+      ],
     }),
-    
+
     // Get recent activity
-    getRecentActivity: builder.query<RecentActivity[], { limit?: number; type?: string }>({
+    getRecentActivity: builder.query<
+      RecentActivity[],
+      { limit?: number; type?: string }
+    >({
       query: (params) => {
         const searchParams = new URLSearchParams();
         if (params.limit) searchParams.append("limit", params.limit.toString());
@@ -157,25 +175,28 @@ export const dashboardApi = createApi({
       },
       providesTags: ["RecentActivity"],
     }),
-    
+
     // Get system health
     getSystemHealth: builder.query<SystemHealth, void>({
       query: () => "health",
       providesTags: ["SystemHealth"],
     }),
-    
+
     // Get dashboard metrics
-    getDashboardMetrics: builder.query<DashboardMetrics, { period: "day" | "week" | "month" | "year" }>({
+    getDashboardMetrics: builder.query<
+      DashboardMetrics,
+      { period: "day" | "week" | "month" | "year" }
+    >({
       query: (params) => `metrics?period=${params.period}`,
       providesTags: ["Dashboard"],
     }),
-    
+
     // Get notification summary
     getNotificationSummary: builder.query<NotificationSummary, void>({
       query: () => "notifications/summary",
       providesTags: ["Dashboard"],
     }),
-    
+
     // Get user activity timeline
     getUserActivityTimeline: builder.query<
       Array<{
@@ -190,7 +211,7 @@ export const dashboardApi = createApi({
       query: (params) => `activity/timeline?period=${params.period}`,
       providesTags: ["Dashboard"],
     }),
-    
+
     // Get email performance metrics
     getEmailPerformance: builder.query<
       {
@@ -199,19 +220,22 @@ export const dashboardApi = createApi({
         clickRate: number;
         bounceRate: number;
         spamRate: number;
-        byTemplate: Record<string, {
-          sent: number;
-          delivered: number;
-          opened: number;
-          clicked: number;
-        }>;
+        byTemplate: Record<
+          string,
+          {
+            sent: number;
+            delivered: number;
+            opened: number;
+            clicked: number;
+          }
+        >;
       },
       { period: "week" | "month" | "quarter" | "year" }
     >({
       query: (params) => `email/performance?period=${params.period}`,
       providesTags: ["Dashboard"],
     }),
-    
+
     // Get system performance metrics
     getSystemPerformance: builder.query<
       {
@@ -245,7 +269,7 @@ export const dashboardApi = createApi({
       query: (params) => `performance?period=${params.period}`,
       providesTags: ["Dashboard"],
     }),
-    
+
     // Get security overview
     getSecurityOverview: builder.query<
       {
@@ -282,7 +306,7 @@ export const dashboardApi = createApi({
       query: () => "security",
       providesTags: ["Dashboard"],
     }),
-    
+
     // Export dashboard data
     exportDashboardData: builder.mutation<
       { success: boolean; downloadUrl?: string; message?: string },
@@ -299,7 +323,7 @@ export const dashboardApi = createApi({
         body: exportData,
       }),
     }),
-    
+
     // Refresh dashboard data
     refreshDashboardData: builder.mutation<
       { success: boolean; message?: string; refreshedAt: Date },
@@ -310,7 +334,13 @@ export const dashboardApi = createApi({
         method: "POST",
         body: refreshData,
       }),
-      invalidatesTags: ["Dashboard", "DashboardStats", "DashboardCharts", "RecentActivity", "SystemHealth"],
+      invalidatesTags: [
+        "Dashboard",
+        "DashboardStats",
+        "DashboardCharts",
+        "RecentActivity",
+        "SystemHealth",
+      ],
     }),
   }),
 });
