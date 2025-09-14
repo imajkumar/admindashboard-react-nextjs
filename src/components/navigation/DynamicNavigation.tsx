@@ -40,7 +40,7 @@ const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
 
         // Add sub-modules if they exist
         if (module.subModules && module.subModules.length > 0) {
-          (menuItem as MenuProps["items"][0]).children =
+          (menuItem as any).children =
             convertModulesToMenuItems(module.subModules);
         }
 
