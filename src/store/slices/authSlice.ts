@@ -203,7 +203,7 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(logoutUser.fulfilled, () => initialState)
-      .addCase(logoutUser.rejected, (state: any, action) => {
+      .addCase(logoutUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Logout failed";
       });

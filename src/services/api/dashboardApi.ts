@@ -109,7 +109,7 @@ export const dashboardApi = createApi({
   reducerPath: "dashboardApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/dashboard",
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers, _api) => {
       // Get token from state or localStorage
       const token = localStorage.getItem("authToken");
       if (token) {

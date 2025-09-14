@@ -27,8 +27,8 @@ export default function Custom404() {
             Lost in Space? 🚀
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            The page you're looking for has drifted into the digital void. 
-            But don't worry, we'll help you navigate back to civilization!
+            The page you're looking for has drifted into the digital void. But
+            don't worry, we'll help you navigate back to civilization!
           </p>
         </div>
 
@@ -42,8 +42,8 @@ export default function Custom404() {
             }
             subTitle={
               <p className="text-lg text-gray-600 mt-4">
-                The page you requested could not be found. It might have been moved, 
-                deleted, or you might have entered the wrong URL.
+                The page you requested could not be found. It might have been
+                moved, deleted, or you might have entered the wrong URL.
               </p>
             }
             extra={
@@ -72,31 +72,39 @@ export default function Custom404() {
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
             <div className="text-4xl mb-4 text-center">🔍</div>
-            <h3 className="font-semibold text-gray-800 mb-2 text-center">Search</h3>
+            <h3 className="font-semibold text-gray-800 mb-2 text-center">
+              Search
+            </h3>
             <p className="text-sm text-gray-600 text-center">
               Use our search feature to find what you need
             </p>
           </div>
-          
+
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
             <div className="text-4xl mb-4 text-center">📊</div>
-            <h3 className="font-semibold text-gray-800 mb-2 text-center">Dashboard</h3>
+            <h3 className="font-semibold text-gray-800 mb-2 text-center">
+              Dashboard
+            </h3>
             <p className="text-sm text-gray-600 text-center">
               Access your main dashboard and analytics
             </p>
           </div>
-          
+
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
             <div className="text-4xl mb-4 text-center">👥</div>
-            <h3 className="font-semibold text-gray-800 mb-2 text-center">Users</h3>
+            <h3 className="font-semibold text-gray-800 mb-2 text-center">
+              Users
+            </h3>
             <p className="text-sm text-gray-600 text-center">
               Manage users and permissions
             </p>
           </div>
-          
+
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
             <div className="text-4xl mb-4 text-center">💬</div>
-            <h3 className="font-semibold text-gray-800 mb-2 text-center">Support</h3>
+            <h3 className="font-semibold text-gray-800 mb-2 text-center">
+              Support
+            </h3>
             <p className="text-sm text-gray-600 text-center">
               Get help from our support team
             </p>
@@ -117,6 +125,7 @@ export default function Custom404() {
             ].map((link) => (
               <button
                 key={link.path}
+                type="button"
                 onClick={() => router.push(link.path)}
                 className="px-6 py-3 bg-white text-gray-700 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-300 font-medium border border-gray-200 hover:border-gray-300"
               >

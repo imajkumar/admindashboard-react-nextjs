@@ -1,6 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 // Types
+export interface SearchResult {
+  id: string;
+  title: string;
+  description?: string;
+  type: string;
+  url: string;
+}
 export interface UIState {
   sidebarCollapsed: boolean;
   sidebarWidth: number;
@@ -45,7 +52,7 @@ export interface UIState {
 
   // Search
   searchQuery: string;
-  searchResults: any[];
+  searchResults: SearchResult[];
   searchOpen: boolean;
 
   // Notifications panel
@@ -190,7 +197,7 @@ const uiSlice = createSlice({
       state.searchQuery = action.payload;
     },
 
-    setSearchResults: (state, action: PayloadAction<any[]>) => {
+    setSearchResults: (state, action: PayloadAction<SearchResult[]>) => {
       state.searchResults = action.payload;
     },
 

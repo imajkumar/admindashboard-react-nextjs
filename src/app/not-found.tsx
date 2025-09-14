@@ -58,7 +58,7 @@ export default function NotFound() {
             </div>
           }
         />
-        
+
         {/* Additional Help Section */}
         <div className="mt-12 bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">
@@ -94,18 +94,21 @@ export default function NotFound() {
           <p className="text-gray-500 mb-4">Quick Links:</p>
           <div className="flex flex-wrap justify-center gap-4">
             <button
+              type="button"
               onClick={() => router.push("/dashboard")}
               className="text-blue-600 hover:text-blue-800 underline text-sm font-medium transition-colors duration-200"
             >
               Dashboard
             </button>
             <button
+              type="button"
               onClick={() => router.push("/dashboard/roles")}
               className="text-blue-600 hover:text-blue-800 underline text-sm font-medium transition-colors duration-200"
             >
               Roles
             </button>
             <button
+              type="button"
               onClick={() => router.push("/")}
               className="text-blue-600 hover:text-blue-800 underline text-sm font-medium transition-colors duration-200"
             >

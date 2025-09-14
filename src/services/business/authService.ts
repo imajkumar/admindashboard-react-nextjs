@@ -1,5 +1,5 @@
 import { type ApiResponse, apiRequest } from "../../config/axios";
-import { STORAGE_KEYS, API_CONFIG } from "../../config/constants";
+import { STORAGE_KEYS } from "../../config/constants";
 import { API_ENDPOINTS } from "../api";
 
 // Auth types
@@ -56,17 +56,24 @@ export interface ResetPasswordData {
 }
 
 // Auth service class
+// biome-ignore lint/complexity/noStaticOnlyClass: This class will be refactored to functions in a future update
 export class AuthService {
   // Login user
   static async login(
     credentials: LoginCredentials,
   ): Promise<ApiResponse<LoginResponse>> {
     try {
-      const response = await apiRequest.post<LoginResponse>("/auth/login", credentials);
+      const response = await apiRequest.post<LoginResponse>(
+        "/auth/login",
+        credentials,
+      );
 
       // Store tokens and user data if login successful
       if (response.data?.accessToken) {
-        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.data.accessToken);
+        localStorage.setItem(
+          STORAGE_KEYS.AUTH_TOKEN,
+          response.data.accessToken,
+        );
         if (response.data.refreshToken) {
           localStorage.setItem(
             STORAGE_KEYS.REFRESH_TOKEN,
@@ -93,7 +100,7 @@ export class AuthService {
       // Try to call logout API
       try {
         await apiRequest.post("/auth/logout");
-      } catch (error) {
+      } catch (_error) {
         console.warn("Logout API call failed, but clearing local data");
       }
 

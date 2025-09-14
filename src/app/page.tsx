@@ -28,7 +28,7 @@ export default function LoginPage() {
   useEffect(() => {
     form.setFieldsValue({
       email: "manish@gmail.com",
-      password: "password"
+      password: "password",
     });
   }, [form]);
 
@@ -78,7 +78,9 @@ export default function LoginPage() {
       }
     } catch (error: unknown) {
       console.error("Login error:", error);
-      const errorMessage = (error as any)?.data?.message || "Login failed";
+      const errorMessage =
+        (error as { data?: { message?: string } })?.data?.message ||
+        "Login failed";
       message.error(errorMessage);
     } finally {
       setLoading(false);
