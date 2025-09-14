@@ -81,7 +81,7 @@ export default function LoginPage() {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "center", 
           alignItems: "center",
           height: "100vh",
         }}
