@@ -10,8 +10,13 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  success: boolean;
+  success?: boolean;
   message?: string;
+  status?: number;
+  data?: {
+    message: string;
+    token: string;
+  };
   user?: UserData;
   token?: string;
   refreshToken?: string;

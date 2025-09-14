@@ -53,13 +53,13 @@ export default function LoginPage() {
 
     try {
       const response = await login(values).unwrap();
-      const token = response.token;
+      const token = response.data?.token || response.token;
       if (token) {
         // Store token in localStorage
         localStorage.setItem("authToken", token);
         localStorage.setItem("isLoggedIn", "true");
 
-        message.success(response.message || "Login successful!");
+        message.success(response.data?.message || response.message || "Login successful!");
 
         // Redirect to dashboard
         router.push("/dashboard");
