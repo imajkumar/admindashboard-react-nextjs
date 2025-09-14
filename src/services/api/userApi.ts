@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { UserData } from "../../services/authService";
+import type { UserData } from "../business/authService";
 
 // Types
 export interface UserCreateRequest {

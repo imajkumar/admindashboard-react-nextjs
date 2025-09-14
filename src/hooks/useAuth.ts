@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { AuthService, type UserData } from "../services/authService";
+import { AuthService, type UserData } from "../services/business/authService";
 
 export interface AuthState {
   isAuthenticated: boolean;

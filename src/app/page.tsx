@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "@/store/services/authApi";
+import { useLoginMutation } from "@/services/api/authApi";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -23,6 +23,14 @@ export default function LoginPage() {
   const [mounted, setMounted] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
+
+  // Set default values
+  useEffect(() => {
+    form.setFieldsValue({
+      email: "manish@gmail.com",
+      password: "password"
+    });
+  }, [form]);
 
   useEffect(() => {
     // Check if user is already logged in

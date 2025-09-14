@@ -1,4 +1,4 @@
-import { UserService } from "../../services/userService";
+import { UserService } from "../../services/business/userService";
 import { BaseController } from "../BaseController";
 
 export interface User {

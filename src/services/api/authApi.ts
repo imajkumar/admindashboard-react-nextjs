@@ -1,7 +1,7 @@
 // src/store/services/authApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_CONFIG } from "@/config/constants";
-import type { UserData } from "../../services/authService";
+import type { UserData } from "../business/authService";
 
 // Types
 export interface LoginRequest {

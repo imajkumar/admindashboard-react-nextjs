@@ -1,6 +1,6 @@
-import { type ApiResponse, apiRequest } from "../config/axios";
-import { STORAGE_KEYS } from "../config/constants";
-import { API_ENDPOINTS } from "./api";
+import { type ApiResponse, apiRequest } from "../../config/axios";
+import { STORAGE_KEYS, API_CONFIG } from "../../config/constants";
+import { API_ENDPOINTS } from "../api";
 
 // Auth types
 export interface LoginCredentials {
@@ -62,39 +62,26 @@ export class AuthService {
     credentials: LoginCredentials,
   ): Promise<ApiResponse<LoginResponse>> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
-      }
-
-      const data = await response.json();
+      const response = await apiRequest.post<LoginResponse>("/auth/login", credentials);
 
       // Store tokens and user data if login successful
-      if (data.data?.token) {
-        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.data.token);
-        if (data.data.refreshToken) {
+      if (response.data?.accessToken) {
+        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.data.accessToken);
+        if (response.data.refreshToken) {
           localStorage.setItem(
             STORAGE_KEYS.REFRESH_TOKEN,
-            data.data.refreshToken,
+            response.data.refreshToken,
           );
         }
-        if (data.data.user) {
+        if (response.data.user) {
           localStorage.setItem(
             STORAGE_KEYS.USER_DATA,
-            JSON.stringify(data.data.user),
+            JSON.stringify(response.data.user),
           );
         }
       }
 
-      return data;
+      return response;
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Login failed");
     }
@@ -103,20 +90,11 @@ export class AuthService {
   // Logout user
   static async logout(): Promise<ApiResponse<void>> {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-
-      if (token) {
-        const response = await fetch(`${API_CONFIG.BASE_URL}/auth/logout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          console.warn("Logout API call failed, but clearing local data");
-        }
+      // Try to call logout API
+      try {
+        await apiRequest.post("/auth/logout");
+      } catch (error) {
+        console.warn("Logout API call failed, but clearing local data");
       }
 
       // Clear local storage

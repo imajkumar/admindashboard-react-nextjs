@@ -1,10 +1,10 @@
-import { type ApiResponse, apiRequest } from "../config/axios";
+import { type ApiResponse, apiRequest } from "../../config/axios";
 import {
   API_ENDPOINTS,
   BaseApiService,
   type ListParams,
   type PaginatedResponse,
-} from "./api";
+} from "../api";
 import type { UserData } from "./authService";
 
 // User types
@@ -52,18 +52,7 @@ export class UserService extends BaseApiService {
   async getUsers(
     params: ListParams & { filters?: UserFilters } = {},
   ): Promise<ApiResponse<PaginatedResponse<UserData>>> {
-    const queryParams = new URLSearchParams();
-
-    if (params.page) queryParams.append("page", params.page.toString());
-    if (params.limit) queryParams.append("limit", params.limit.toString());
-    if (params.filters?.role) queryParams.append("role", params.filters.role);
-    if (params.filters?.isActive !== undefined)
-      queryParams.append("isActive", params.filters.isActive.toString());
-    if (params.filters?.search)
-      queryParams.append("search", params.filters.search);
-
-    const url = `${API_ENDPOINTS.USERS.BASE}?${queryParams.toString()}`;
-    return this.get<PaginatedResponse<UserData>>(url);
+    return this.getList<UserData>(params);
   }
 
   // Get user by ID

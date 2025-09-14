@@ -1,5 +1,5 @@
-import { type ApiResponse, apiRequest } from "../config/axios";
-import { API_ENDPOINTS } from "./api";
+import { type ApiResponse, apiRequest } from "../../config/axios";
+import { API_ENDPOINTS } from "../api";
 
 // Dashboard types
 export interface DashboardStats {
@@ -64,8 +64,8 @@ export class DashboardService {
   ): Promise<ApiResponse<DashboardStats>> {
     const queryParams = new URLSearchParams();
 
-    if (filters?.startDate) queryParams.append("startDate", filters.startDate);
-    if (filters?.endDate) queryParams.append("endDate", filters.endDate);
+    if (filters?.dateRange?.from) queryParams.append("startDate", filters.dateRange.from);
+    if (filters?.dateRange?.to) queryParams.append("endDate", filters.dateRange.to);
     if (filters?.period) queryParams.append("period", filters.period);
 
     const url = `/dashboard/stats?${queryParams.toString()}`;
@@ -80,8 +80,8 @@ export class DashboardService {
     const queryParams = new URLSearchParams();
 
     queryParams.append("chartType", chartType);
-    if (filters?.startDate) queryParams.append("startDate", filters.startDate);
-    if (filters?.endDate) queryParams.append("endDate", filters.endDate);
+    if (filters?.dateRange?.from) queryParams.append("startDate", filters.dateRange.from);
+    if (filters?.dateRange?.to) queryParams.append("endDate", filters.dateRange.to);
     if (filters?.period) queryParams.append("period", filters.period);
 
     const url = `/dashboard/chart-data?${queryParams.toString()}`;

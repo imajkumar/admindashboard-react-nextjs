@@ -4,10 +4,10 @@ import { combineReducers } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 // Import API services
-import { authApi } from "./services/authApi";
-// import { emailApi } from "./services/emailApi";
-import { dashboardApi } from "./services/dashboardApi";
-import { userApi } from "./services/userApi";
+import { authApi } from "../services/api/authApi";
+// import { emailApi } from "../services/api/emailApi";
+import { dashboardApi } from "../services/api/dashboardApi";
+import { userApi } from "../services/api/userApi";
 // Import slices
 import authSlice from "./slices/authSlice";
 import languageSlice from "./slices/languageSlice";
