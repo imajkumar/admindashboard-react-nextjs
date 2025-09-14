@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { AuthService, type UserData } from "../services/authService";
+import { AuthService, type UserData } from "../services/business/authService";
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -134,6 +134,29 @@ export const useAuth = () => {
     return permissionMap[role] || permissionMap.guest;
   }, []);
 
+  // Logout function
+  const logout = useCallback(async () => {
+    try {
+      await AuthService.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setAuthState({
+        isAuthenticated: false,
+        user: null,
+        userPermissions: [],
+        isLoading: false,
+      });
+
+      // Clear any stored data
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Redirect to login
+      router.push("/");
+    }
+  }, [router]);
+
   // Check authentication status
   const checkAuth = useCallback(async () => {
     try {
@@ -179,7 +202,7 @@ export const useAuth = () => {
       console.error("Auth check error:", error);
       await logout();
     }
-  }, [getUserPermissions]);
+  }, [getUserPermissions, logout]);
 
   // Login function
   const login = useCallback(
@@ -213,29 +236,6 @@ export const useAuth = () => {
     },
     [getUserPermissions],
   );
-
-  // Logout function
-  const logout = useCallback(async () => {
-    try {
-      await AuthService.logout();
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setAuthState({
-        isAuthenticated: false,
-        user: null,
-        userPermissions: [],
-        isLoading: false,
-      });
-
-      // Clear any stored data
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // Redirect to login
-      router.push("/");
-    }
-  }, [router]);
 
   // Check if user has specific permission
   const hasPermission = useCallback(

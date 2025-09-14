@@ -1,0 +1,7 @@
+.sidebar-menu .ant-menu-inline .ant-menu-item {
+  height: 60px;
+}
+
+.sidebar-menu .ant-menu-inline .ant-menu-item:hover {
+  background-color: #0255e5;
+}

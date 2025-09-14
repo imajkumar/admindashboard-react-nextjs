@@ -1,10 +1,12 @@
+// src/config/axios.ts
+
+import { message } from "antd";
 import axios, {
+  type AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
   type AxiosResponse,
-  type AxiosError,
 } from "axios";
-import { message } from "antd";
 import { API_CONFIG, HTTP_STATUS, STORAGE_KEYS } from "./constants";
 
 // Create axios instance

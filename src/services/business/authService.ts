@@ -1,6 +1,6 @@
-import { apiRequest, ApiResponse } from "../config/axios";
-import { API_ENDPOINTS } from "./api";
-import { STORAGE_KEYS } from "../config/constants";
+import { type ApiResponse, apiRequest } from "../../config/axios";
+import { STORAGE_KEYS, API_CONFIG } from "../../config/constants";
+import { API_ENDPOINTS } from "../api";
 
 // Auth types
 export interface LoginCredentials {
@@ -21,10 +21,12 @@ export interface UserData {
   email: string;
   firstName: string;
   lastName: string;
+  username: string;
   role: string;
   avatar?: string;
   isActive: boolean;
   lastLogin?: string;
+  department?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -60,77 +62,57 @@ export class AuthService {
     credentials: LoginCredentials,
   ): Promise<ApiResponse<LoginResponse>> {
     try {
-      // For Platzi fake API, we'll simulate the login process
-      // In a real app, this would call the actual API
-      if (credentials.email && credentials.password) {
-        // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await apiRequest.post<LoginResponse>("/auth/login", credentials);
 
-        // Create mock response for demo purposes
-        const mockResponse: ApiResponse<LoginResponse> = {
-          success: true,
-          data: {
-            accessToken: "mock-jwt-token-" + Date.now(),
-            refreshToken: "mock-refresh-token-" + Date.now(),
-            user: {
-              id: "1",
-              email: credentials.email,
-              firstName: credentials.email.split("@")[0],
-              lastName: "User",
-              role: "admin",
-              avatar: "",
-              isActive: true,
-              lastLogin: new Date().toISOString(),
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            expiresIn: 3600,
-          },
-          message: "Login successful",
-        };
-
-        // Store tokens and user data
-        localStorage.setItem(
-          STORAGE_KEYS.AUTH_TOKEN,
-          mockResponse.data.accessToken,
-        );
-        localStorage.setItem(
-          STORAGE_KEYS.REFRESH_TOKEN,
-          mockResponse.data.refreshToken,
-        );
-        localStorage.setItem(
-          STORAGE_KEYS.USER_DATA,
-          JSON.stringify(mockResponse.data.user),
-        );
-
-        return mockResponse;
-      } else {
-        throw new Error("Email and password are required");
+      // Store tokens and user data if login successful
+      if (response.data?.accessToken) {
+        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.data.accessToken);
+        if (response.data.refreshToken) {
+          localStorage.setItem(
+            STORAGE_KEYS.REFRESH_TOKEN,
+            response.data.refreshToken,
+          );
+        }
+        if (response.data.user) {
+          localStorage.setItem(
+            STORAGE_KEYS.USER_DATA,
+            JSON.stringify(response.data.user),
+          );
+        }
       }
+
+      return response;
     } catch (error) {
-      throw error;
+      throw new Error(error instanceof Error ? error.message : "Login failed");
     }
   }
 
   // Logout user
   static async logout(): Promise<ApiResponse<void>> {
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Try to call logout API
+      try {
+        await apiRequest.post("/auth/logout");
+      } catch (error) {
+        console.warn("Logout API call failed, but clearing local data");
+      }
 
       // Clear local storage
-      this.clearAuthData();
+      AuthService.clearAuthData();
 
-      // Return mock response
       return {
         success: true,
         data: undefined,
         message: "Logout successful",
       };
-    } catch (error) {
+    } catch (_error) {
       // Even if API call fails, clear local data
-      this.clearAuthData();
-      throw error;
+      AuthService.clearAuthData();
+      return {
+        success: true,
+        data: undefined,
+        message: "Logout successful (local data cleared)",
+      };
     }
   }
 
@@ -188,27 +170,27 @@ export class AuthService {
 
   // Check if user is authenticated
   static isAuthenticated(): boolean {
-    const token = this.getAuthToken();
-    const user = this.getCurrentUser();
+    const token = AuthService.getAuthToken();
+    const user = AuthService.getCurrentUser();
     return !!(token && user);
   }
 
   // Check if user has specific role
   static hasRole(role: string): boolean {
-    const user = this.getCurrentUser();
+    const user = AuthService.getCurrentUser();
     return user?.role === role;
   }
 
   // Check if user has any of the specified roles
   static hasAnyRole(roles: string[]): boolean {
-    const user = this.getCurrentUser();
+    const user = AuthService.getCurrentUser();
     return user ? roles.includes(user.role) : false;
   }
 
   // Check if user has permission (for future use)
-  static hasPermission(permission: string): boolean {
+  static hasPermission(_permission: string): boolean {
     // This can be extended to check specific permissions
-    const user = this.getCurrentUser();
+    const user = AuthService.getCurrentUser();
     return user?.role === "admin" || user?.role === "super_admin";
   }
 
@@ -221,7 +203,7 @@ export class AuthService {
 
   // Update user data in storage
   static updateUserData(userData: Partial<UserData>): void {
-    const currentUser = this.getCurrentUser();
+    const currentUser = AuthService.getCurrentUser();
     if (currentUser) {
       const updatedUser = { ...currentUser, ...userData };
       localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(updatedUser));
@@ -235,7 +217,7 @@ export class AuthService {
         API_ENDPOINTS.USERS.PROFILE,
       );
       if (response.success && response.data) {
-        this.updateUserData(response.data);
+        AuthService.updateUserData(response.data);
         return response.data;
       }
       return null;

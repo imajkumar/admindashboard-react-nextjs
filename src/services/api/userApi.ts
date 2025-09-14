@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { UserData } from "../../services/authService";
+import type { UserData } from "../business/authService";
 
 // Types
 export interface UserCreateRequest {
@@ -43,7 +43,12 @@ export interface PaginatedUserResponse {
 
 export interface UserBulkOperationRequest {
   userIds: string[];
-  operation: "activate" | "deactivate" | "delete" | "changeRole" | "changeDepartment";
+  operation:
+    | "activate"
+    | "deactivate"
+    | "delete"
+    | "changeRole"
+    | "changeDepartment";
   data?: {
     role?: string;
     department?: string;
@@ -80,19 +85,24 @@ export const userApi = createApi({
     getUsers: builder.query<PaginatedUserResponse, UserListParams>({
       query: (params) => {
         const searchParams = new URLSearchParams();
-        
+
         if (params.page) searchParams.append("page", params.page.toString());
         if (params.limit) searchParams.append("limit", params.limit.toString());
         if (params.sortBy) searchParams.append("sortBy", params.sortBy);
-        if (params.sortOrder) searchParams.append("sortOrder", params.sortOrder);
-        
+        if (params.sortOrder)
+          searchParams.append("sortOrder", params.sortOrder);
+
         if (params.filters) {
-          if (params.filters.role) searchParams.append("role", params.filters.role);
-          if (params.filters.department) searchParams.append("department", params.filters.department);
-          if (params.filters.isActive !== undefined) searchParams.append("isActive", params.filters.isActive.toString());
-          if (params.filters.search) searchParams.append("search", params.filters.search);
+          if (params.filters.role)
+            searchParams.append("role", params.filters.role);
+          if (params.filters.department)
+            searchParams.append("department", params.filters.department);
+          if (params.filters.isActive !== undefined)
+            searchParams.append("isActive", params.filters.isActive.toString());
+          if (params.filters.search)
+            searchParams.append("search", params.filters.search);
         }
-        
+
         return `?${searchParams.toString()}`;
       },
       providesTags: (result) =>
@@ -103,13 +113,13 @@ export const userApi = createApi({
             ]
           : [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Get user by ID
     getUserById: builder.query<UserData, string>({
       query: (id) => id,
-      providesTags: (result, error, id) => [{ type: "User", id }],
+      providesTags: (_result, _error, id) => [{ type: "User", id }],
     }),
-    
+
     // Create new user
     createUser: builder.mutation<UserData, UserCreateRequest>({
       query: (userData) => ({
@@ -119,7 +129,7 @@ export const userApi = createApi({
       }),
       invalidatesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Update user
     updateUser: builder.mutation<UserData, UserUpdateRequest>({
       query: ({ id, updates }) => ({
@@ -127,26 +137,32 @@ export const userApi = createApi({
         method: "PUT",
         body: updates,
       }),
-      invalidatesTags: (result, error, { id }) => [
+      invalidatesTags: (_result, _error, { id }) => [
         { type: "User", id },
         { type: "UserList", id: "LIST" },
       ],
     }),
-    
+
     // Delete user
-    deleteUser: builder.mutation<{ success: boolean; message?: string }, string>({
+    deleteUser: builder.mutation<
+      { success: boolean; message?: string },
+      string
+    >({
       query: (id) => ({
         url: id,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (_result, _error, id) => [
         { type: "User", id },
         { type: "UserList", id: "LIST" },
       ],
     }),
-    
+
     // Bulk operations
-    bulkOperation: builder.mutation<UserBulkOperationResponse, UserBulkOperationRequest>({
+    bulkOperation: builder.mutation<
+      UserBulkOperationResponse,
+      UserBulkOperationRequest
+    >({
       query: (bulkData) => ({
         url: "bulk",
         method: "POST",
@@ -154,25 +170,25 @@ export const userApi = createApi({
       }),
       invalidatesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Get users by role
     getUsersByRole: builder.query<UserData[], string>({
       query: (role) => `by-role/${role}`,
       providesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Get users by department
     getUsersByDepartment: builder.query<UserData[], string>({
       query: (department) => `by-department/${department}`,
       providesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Get active users
     getActiveUsers: builder.query<UserData[], void>({
       query: () => "active",
       providesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Get user statistics
     getUserStats: builder.query<
       {
@@ -187,13 +203,13 @@ export const userApi = createApi({
       query: () => "stats",
       providesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Search users
     searchUsers: builder.query<UserData[], string>({
       query: (searchTerm) => `search?q=${encodeURIComponent(searchTerm)}`,
       providesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Export users
     exportUsers: builder.mutation<
       { success: boolean; downloadUrl?: string; message?: string },
@@ -205,10 +221,15 @@ export const userApi = createApi({
         body: exportData,
       }),
     }),
-    
+
     // Import users
     importUsers: builder.mutation<
-      { success: boolean; message?: string; imported: number; errors: string[] },
+      {
+        success: boolean;
+        message?: string;
+        imported: number;
+        errors: string[];
+      },
       FormData
     >({
       query: (formData) => ({
@@ -218,7 +239,7 @@ export const userApi = createApi({
       }),
       invalidatesTags: [{ type: "UserList", id: "LIST" }],
     }),
-    
+
     // Get user activity
     getUserActivity: builder.query<
       Array<{
@@ -230,15 +251,17 @@ export const userApi = createApi({
       { userId: string; limit?: number }
     >({
       query: ({ userId, limit = 10 }) => `${userId}/activity?limit=${limit}`,
-      providesTags: (result, error, { userId }) => [{ type: "User", id: userId }],
+      providesTags: (_result, _error, { userId }) => [
+        { type: "User", id: userId },
+      ],
     }),
-    
+
     // Get user preferences
     getUserPreferences: builder.query<Record<string, unknown>, string>({
       query: (userId) => `${userId}/preferences`,
-      providesTags: (result, error, userId) => [{ type: "User", id: userId }],
+      providesTags: (_result, _error, userId) => [{ type: "User", id: userId }],
     }),
-    
+
     // Update user preferences
     updateUserPreferences: builder.mutation<
       { success: boolean; message?: string },
@@ -249,7 +272,9 @@ export const userApi = createApi({
         method: "PUT",
         body: preferences,
       }),
-      invalidatesTags: (result, error, { userId }) => [{ type: "User", id: userId }],
+      invalidatesTags: (_result, _error, { userId }) => [
+        { type: "User", id: userId },
+      ],
     }),
   }),
 });

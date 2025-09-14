@@ -1,8 +1,8 @@
 "use client";
 
-import type React from "react";
 import { Menu, type MenuProps } from "antd";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import type React from "react";
 import { APP_MODULES, type ModuleConfig } from "../../config/modules";
 import { useAuth } from "../../hooks/useAuth";
 import { getIconComponent } from "../../utils/iconUtils";
@@ -31,7 +31,7 @@ const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
         );
       })
       .map((module) => {
-        const menuItem: MenuProps["items"][0] = {
+        const menuItem: NonNullable<MenuProps["items"]>[number] = {
           key: module.path,
           icon: getIconComponent(module.icon),
           label: collapsed ? undefined : module.name,
@@ -40,7 +40,9 @@ const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
 
         // Add sub-modules if they exist
         if (module.subModules && module.subModules.length > 0) {
-          menuItem.children = convertModulesToMenuItems(module.subModules);
+          (menuItem as any).children = convertModulesToMenuItems(
+            module.subModules,
+          );
         }
 
         return menuItem;

@@ -1,10 +1,10 @@
+import { type ApiResponse, apiRequest } from "../../config/axios";
 import {
   API_ENDPOINTS,
   BaseApiService,
   type ListParams,
   type PaginatedResponse,
-} from "./api";
-import { type ApiResponse, apiRequest } from "../config/axios";
+} from "../api";
 import type { UserData } from "./authService";
 
 // User types
@@ -52,95 +52,7 @@ export class UserService extends BaseApiService {
   async getUsers(
     params: ListParams & { filters?: UserFilters } = {},
   ): Promise<ApiResponse<PaginatedResponse<UserData>>> {
-    // Simulate API call with mock data
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const mockUsers: UserData[] = [
-      {
-        id: "1",
-        email: "john.doe@example.com",
-        firstName: "John",
-        lastName: "Doe",
-        role: "admin",
-        avatar: "",
-        isActive: true,
-        lastLogin: new Date(Date.now() - 86400000).toISOString(),
-        createdAt: new Date(Date.now() - 2592000000).toISOString(),
-        updatedAt: new Date(Date.now() - 86400000).toISOString(),
-      },
-      {
-        id: "2",
-        email: "jane.smith@example.com",
-        firstName: "Jane",
-        lastName: "Smith",
-        role: "manager",
-        avatar: "",
-        isActive: true,
-        lastLogin: new Date(Date.now() - 172800000).toISOString(),
-        createdAt: new Date(Date.now() - 5184000000).toISOString(),
-        updatedAt: new Date(Date.now() - 172800000).toISOString(),
-      },
-      {
-        id: "3",
-        email: "bob.johnson@example.com",
-        firstName: "Bob",
-        lastName: "Johnson",
-        role: "user",
-        avatar: "",
-        isActive: false,
-        lastLogin: new Date(Date.now() - 604800000).toISOString(),
-        createdAt: new Date(Date.now() - 7776000000).toISOString(),
-        updatedAt: new Date(Date.now() - 604800000).toISOString(),
-      },
-    ];
-
-    // Apply filters
-    let filteredUsers = mockUsers;
-
-    if (params.filters?.role) {
-      filteredUsers = filteredUsers.filter(
-        (user) => user.role === params.filters?.role,
-      );
-    }
-
-    if (params.filters?.isActive !== undefined) {
-      filteredUsers = filteredUsers.filter(
-        (user) => user.isActive === params.filters?.isActive,
-      );
-    }
-
-    if (params.filters?.search) {
-      const searchTerm = params.filters.search.toLowerCase();
-      filteredUsers = filteredUsers.filter(
-        (user) =>
-          user.firstName.toLowerCase().includes(searchTerm) ||
-          user.lastName.toLowerCase().includes(searchTerm) ||
-          user.email.toLowerCase().includes(searchTerm),
-      );
-    }
-
-    // Apply pagination
-    const page = params.page || 1;
-    const limit = params.limit || 10;
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
-
-    const mockResponse: ApiResponse<PaginatedResponse<UserData>> = {
-      success: true,
-      data: {
-        data: paginatedUsers,
-        pagination: {
-          page,
-          limit,
-          total: filteredUsers.length,
-          totalPages: Math.ceil(filteredUsers.length / limit),
-        },
-      },
-      message: "Users retrieved successfully",
-    };
-
-    return mockResponse;
+    return this.getList<UserData>(params);
   }
 
   // Get user by ID

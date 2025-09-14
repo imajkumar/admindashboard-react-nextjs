@@ -1,9 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Form, Input, Button, Card, Typography, Layout, message } from "antd";
-import { UserOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  Layout,
+  message,
+  Spin,
+  Typography,
+} from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useLoginMutation } from "@/services/api/authApi";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -11,7 +21,16 @@ const { Content } = Layout;
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [form] = Form.useForm();
   const router = useRouter();
+
+  // Set default values
+  useEffect(() => {
+    form.setFieldsValue({
+      email: "manish@gmail.com",
+      password: "password"
+    });
+  }, [form]);
 
   useEffect(() => {
     // Check if user is already logged in
@@ -35,29 +54,32 @@ export default function LoginPage() {
     return () => clearTimeout(timer);
   }, [router]);
 
-  const onFinish = async (values: { username: string; password: string }) => {
+  const [login] = useLoginMutation();
+
+  const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
 
     try {
-      // Simulate login API call
-      if (values.username && values.password) {
-        // For demo purposes, accept any username/password
-        // In real app, you would validate against your backend
-        message.success("Login successful!");
-
-        // Store login state (in real app, store JWT token)
+      const response = await login(values).unwrap();
+      const token = response.data?.token || response.token;
+      if (token) {
+        // Store token in localStorage
+        localStorage.setItem("authToken", token);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", values.username);
+
+        message.success(
+          response.data?.message || response.message || "Login successful!",
+        );
 
         // Redirect to dashboard
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 1000);
+        router.push("/dashboard");
       } else {
-        message.error("Please enter username and password");
+        message.error("Invalid response. Token missing.");
       }
-    } catch (_error) {
-      message.error("Login failed. Please try again.");
+    } catch (error: unknown) {
+      console.error("Login error:", error);
+      const errorMessage = (error as any)?.data?.message || "Login failed";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -74,13 +96,13 @@ export default function LoginPage() {
           height: "100vh",
         }}
       >
-        <div>Loading...</div>
+        <Spin size="small" />
       </div>
     );
   }
 
   return (
-    <Layout style={{ minHeight: "100vh", background: "#f0f2f5" }}>
+    <Layout style={{ minHeight: "100vh", background: "#0255E5" }}>
       <Content
         style={{
           display: "flex",
@@ -98,56 +120,72 @@ export default function LoginPage() {
         >
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <Title level={2} style={{ marginBottom: "8px" }}>
-              Admin Login
+              Queue flow
             </Title>
-            <Text type="secondary">
+            {/* <Text type="secondary">
               Enter your credentials to access the dashboard
-            </Text>
+            </Text> */}
           </div>
 
+          <h1 className="text-4xl font-semibold mb-4">Login</h1>
+
           <Form
+            form={form}
             name="login"
+            layout="vertical"
             onFinish={onFinish}
             autoComplete="off"
-            layout="vertical"
-            size="large"
+            requiredMark={false}
+            className="input-form"
           >
             <Form.Item
-              name="username"
+              label="Email address"
+              name="email"
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: "Please enter your email" },
+                { type: "email", message: "Please enter a valid email" },
               ]}
             >
-              <Input
-                prefix={<UserOutlined />}
-                placeholder="Username"
-                autoComplete="username"
-              />
+              <Input placeholder="Enter here" size="large" />
             </Form.Item>
 
             <Form.Item
+              label="Password"
               name="password"
               rules={[
-                { required: true, message: "Please input your password!" },
+                { required: true, message: "Please enter your password" },
               ]}
             >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Password"
-                autoComplete="current-password"
-              />
+              <Input.Password placeholder="Enter here" size="large" />
             </Form.Item>
+
+            <div className="flex justify-between">
+              <Form.Item className="mb-6">
+                <Checkbox
+                // checked={rememberMe}
+                // onChange={e => setRememberMe(e.target.checked)}
+                >
+                  Keep me logged in
+                </Checkbox>
+              </Form.Item>
+
+              <Form.Item className="mb-6">
+                <a href="/forgot-password" className="text-primary">
+                  Forgot password?
+                </a>
+              </Form.Item>
+            </div>
 
             <Form.Item>
               <Button
-                type="primary"
+                type="default"
                 htmlType="submit"
-                loading={loading}
-                icon={<LoginOutlined />}
-                style={{ width: "100%" }}
+                block
                 size="large"
+                loading={loading}
+                className="h-12 !bg-secondary  !hover:bg-secondary/80 text-white font-semibold "
               >
-                Log in
+                Login
               </Button>
             </Form.Item>
           </Form>

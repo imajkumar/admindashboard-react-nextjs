@@ -1,4 +1,4 @@
-import { apiRequest, type ApiResponse } from "../config/axios";
+import { type ApiResponse, apiRequest } from "../config/axios";
 
 // Base API endpoints
 export const API_ENDPOINTS = {

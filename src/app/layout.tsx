@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import ReduxProvider from "../store/ReduxProvider";
-import ThemeProvider from "../contexts/ThemeContext";
 import LanguageProvider from "../contexts/LanguageContext";
+import ThemeProvider from "../contexts/ThemeContext";
+import ReduxProvider from "../store/ReduxProvider";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",

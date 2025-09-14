@@ -1,10 +1,10 @@
 "use client";
 
-import type React from "react";
+import { HomeOutlined } from "@ant-design/icons";
 import { Breadcrumb as AntBreadcrumb } from "antd";
 import { usePathname } from "next/navigation";
+import type React from "react";
 import { getBreadcrumbForPath } from "../../config/modules";
-import { HomeOutlined } from "@ant-design/icons";
 
 const Breadcrumb: React.FC = () => {
   const pathname = usePathname();

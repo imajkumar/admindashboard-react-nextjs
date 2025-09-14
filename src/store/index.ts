@@ -1,39 +1,37 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
-
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+// Import API services
+import { authApi } from "../services/api/authApi";
+// import { emailApi } from "../services/api/emailApi";
+import { dashboardApi } from "../services/api/dashboardApi";
+import { userApi } from "../services/api/userApi";
 // Import slices
 import authSlice from "./slices/authSlice";
-import userSlice from "./slices/userSlice";
-import emailSlice from "./slices/emailSlice";
-import themeSlice from "./slices/themeSlice";
 import languageSlice from "./slices/languageSlice";
-import uiSlice from "./slices/uiSlice";
 import notificationSlice from "./slices/notificationSlice";
-
-// Import API services
-import { authApi } from "./services/authApi";
-import { userApi } from "./services/userApi";
-import { emailApi } from "./services/emailApi";
-import { dashboardApi } from "./services/dashboardApi";
+// import emailSlice from "./slices/emailSlice";
+import themeSlice from "./slices/themeSlice";
+import uiSlice from "./slices/uiSlice";
+import userSlice from "./slices/userSlice";
 
 // Root reducer
 const rootReducer = combineReducers({
   // Core slices
   auth: authSlice,
   user: userSlice,
-  email: emailSlice,
+  // email: emailSlice,
   theme: themeSlice,
   language: languageSlice,
   ui: uiSlice,
   notification: notificationSlice,
-  
+
   // API services
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
-  [emailApi.reducerPath]: emailApi.reducer,
+  // [emailApi.reducerPath]: emailApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
 });
 
@@ -59,7 +57,7 @@ export const store = configureStore({
     }).concat([
       authApi.middleware,
       userApi.middleware,
-      emailApi.middleware,
+      // emailApi.middleware,
       dashboardApi.middleware,
     ]),
   devTools: process.env.NODE_ENV !== "production",

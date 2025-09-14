@@ -1,5 +1,5 @@
+import { UserService } from "../../services/business/userService";
 import { BaseController } from "../BaseController";
-import { UserService } from "../../services/userService";
 
 export interface User {
   id: string | number;
