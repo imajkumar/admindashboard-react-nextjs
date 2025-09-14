@@ -59,7 +59,9 @@ export default function LoginPage() {
         localStorage.setItem("authToken", token);
         localStorage.setItem("isLoggedIn", "true");
 
-        message.success(response.data?.message || response.message || "Login successful!");
+        message.success(
+          response.data?.message || response.message || "Login successful!",
+        );
 
         // Redirect to dashboard
         router.push("/dashboard");

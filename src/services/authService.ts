@@ -61,75 +61,80 @@ export class AuthService {
   static async login(
     credentials: LoginCredentials,
   ): Promise<ApiResponse<LoginResponse>> {
-    // For Platzi fake API, we'll simulate the login process
-    // In a real app, this would call the actual API
-    if (credentials.email && credentials.password) {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Create mock response for demo purposes
-      const mockResponse: ApiResponse<LoginResponse> = {
-        success: true,
-        data: {
-          accessToken: `mock-jwt-token-${Date.now()}`,
-          refreshToken: `mock-refresh-token-${Date.now()}`,
-          user: {
-            id: "1",
-            email: credentials.email,
-            firstName: credentials.email.split("@")[0],
-            lastName: "User",
-            username: credentials.email.split("@")[0],
-            role: "admin",
-            avatar: "",
-            isActive: true,
-            lastLogin: new Date().toISOString(),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-          expiresIn: 3600,
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        message: "Login successful",
-      };
+        body: JSON.stringify(credentials),
+      });
 
-      // Store tokens and user data
-      localStorage.setItem(
-        STORAGE_KEYS.AUTH_TOKEN,
-        mockResponse.data.accessToken,
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.REFRESH_TOKEN,
-        mockResponse.data.refreshToken,
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.USER_DATA,
-        JSON.stringify(mockResponse.data.user),
-      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
 
-      return mockResponse;
-    } else {
-      throw new Error("Email and password are required");
+      const data = await response.json();
+
+      // Store tokens and user data if login successful
+      if (data.data?.token) {
+        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.data.token);
+        if (data.data.refreshToken) {
+          localStorage.setItem(
+            STORAGE_KEYS.REFRESH_TOKEN,
+            data.data.refreshToken,
+          );
+        }
+        if (data.data.user) {
+          localStorage.setItem(
+            STORAGE_KEYS.USER_DATA,
+            JSON.stringify(data.data.user),
+          );
+        }
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Login failed");
     }
   }
 
   // Logout user
   static async logout(): Promise<ApiResponse<void>> {
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+
+      if (token) {
+        const response = await fetch(`${API_CONFIG.BASE_URL}/auth/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          console.warn("Logout API call failed, but clearing local data");
+        }
+      }
 
       // Clear local storage
       AuthService.clearAuthData();
 
-      // Return mock response
       return {
         success: true,
         data: undefined,
         message: "Logout successful",
       };
-    } catch (error) {
+    } catch (_error) {
       // Even if API call fails, clear local data
       AuthService.clearAuthData();
-      throw error;
+      return {
+        success: true,
+        data: undefined,
+        message: "Logout successful (local data cleared)",
+      };
     }
   }
 
