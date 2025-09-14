@@ -205,7 +205,7 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, () => initialState)
       .addCase(logoutUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || "Logout failed";
+        state.error = (action.payload as string) || "Logout failed";
       });
 
     // Refresh token
