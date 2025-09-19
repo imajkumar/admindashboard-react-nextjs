@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{subject}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1890ff;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #1890ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #1890ff;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .priority-high {
+            border-left-color: #d32f2f;
+            background-color: #ffebee;
+        }
+        .priority-medium {
+            border-left-color: #ff9800;
+            background-color: #fff3e0;
+        }
+        .priority-low {
+            border-left-color: #4caf50;
+            background-color: #e8f5e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">AdminFront</div>
+            <div class="title">{{subject}}</div>
+        </div>
+        
+        <div class="content">
+            <p>Hello <strong>{{recipientName}}</strong>,</p>
+            
+            <div class="info-box {{priorityClass}}">
+                <strong>Notification Details:</strong><br>
+                Type: <strong>{{notificationType}}</strong><br>
+                Priority: <strong>{{priority}}</strong><br>
+                Time: <strong>{{timestamp}}</strong>
+            </div>
+            
+            <p>{{message}}</p>
+            
+            {{#if actionRequired}}
+            <p><strong>Action Required:</strong> {{actionDescription}}</p>
+            {{/if}}
+            
+            {{#if actionUrl}}
+            <div style="text-align: center;">
+                <a href="{{actionUrl}}" class="button">{{actionButtonText}}</a>
+            </div>
+            {{/if}}
+            
+            {{#if additionalInfo}}
+            <div class="info-box">
+                <strong>Additional Information:</strong><br>
+                {{{additionalInfo}}}
+            </div>
+            {{/if}}
+            
+            <p>If you have any questions or need assistance, please contact our support team.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Best regards,<br>The AdminFront Team</p>
+            <p>This is an automated message. Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

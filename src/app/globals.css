@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* inputs  */
+.input-form .ant-form-item .ant-input,
+.input-form .ant-select-selector,
+.input-form .ant-picker,
+.add-points .ant-input {
+  height: 48px !important;
+}
+
+.input-form .ant-form-item-label > label {
+  font-weight: 600;
+  color: #0255E5 !important;
+}
+
+.input-form .ant-form-item .custom-textarea.ant-input {
+  height: 100px;
+}
+
+.ant-input-affix-wrapper {
+  padding: 0 12px;
+}
+
+/* table*/
+.custom-table .ant-table-thead>tr>th {
+  background-color: white !important;
+  color: black;
+  font-weight: 600;
+}
+
+.custom-table .ant-table-tbody>tr>td {
+  color: #515A63 !important;
+}
+
+.ant-select-arrow {
+  top: 75% !important;
+}
+
+/* scroll bar  */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
