@@ -70,7 +70,7 @@ export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/users",
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers, _api) => {
       // Get token from state or localStorage
       const token = localStorage.getItem("authToken");
       if (token) {

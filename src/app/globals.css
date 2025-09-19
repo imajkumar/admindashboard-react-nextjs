@@ -28,10 +28,13 @@ body {
 }
 
 /* inputs  */
+.add-points .ant-input {
+  height: 48px;
+}
+
 .input-form .ant-form-item .ant-input,
 .input-form .ant-select-selector,
-.input-form .ant-picker,
-.add-points .ant-input {
+.input-form .ant-picker {
   height: 48px;
 }
 

@@ -35,7 +35,7 @@ export interface RecentActivity {
   userId?: string;
   userName?: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Notification {
@@ -56,6 +56,43 @@ export interface DashboardFilters {
   period?: "daily" | "weekly" | "monthly" | "yearly";
 }
 
+export interface UserActivitySummary {
+  totalActivities: number;
+  activeUsers: number;
+  topActions: Array<{
+    action: string;
+    count: number;
+  }>;
+  timeRange: {
+    from: string;
+    to: string;
+  };
+}
+
+export interface SystemHealth {
+  status: "healthy" | "warning" | "critical";
+  uptime: number;
+  memoryUsage: number;
+  cpuUsage: number;
+  diskUsage: number;
+  lastCheck: string;
+}
+
+export interface PerformanceMetrics {
+  responseTime: number;
+  throughput: number;
+  errorRate: number;
+  availability: number;
+  timestamp: string;
+}
+
+export interface RealTimeUpdate {
+  id: string;
+  type: string;
+  data: unknown;
+  timestamp: string;
+}
+
 // Dashboard service class
 export class DashboardService {
   // Get dashboard statistics
@@ -64,8 +101,10 @@ export class DashboardService {
   ): Promise<ApiResponse<DashboardStats>> {
     const queryParams = new URLSearchParams();
 
-    if (filters?.dateRange?.from) queryParams.append("startDate", filters.dateRange.from);
-    if (filters?.dateRange?.to) queryParams.append("endDate", filters.dateRange.to);
+    if (filters?.dateRange?.from)
+      queryParams.append("startDate", filters.dateRange.from);
+    if (filters?.dateRange?.to)
+      queryParams.append("endDate", filters.dateRange.to);
     if (filters?.period) queryParams.append("period", filters.period);
 
     const url = `/dashboard/stats?${queryParams.toString()}`;
@@ -80,8 +119,10 @@ export class DashboardService {
     const queryParams = new URLSearchParams();
 
     queryParams.append("chartType", chartType);
-    if (filters?.dateRange?.from) queryParams.append("startDate", filters.dateRange.from);
-    if (filters?.dateRange?.to) queryParams.append("endDate", filters.dateRange.to);
+    if (filters?.dateRange?.from)
+      queryParams.append("startDate", filters.dateRange.from);
+    if (filters?.dateRange?.to)
+      queryParams.append("endDate", filters.dateRange.to);
     if (filters?.period) queryParams.append("period", filters.period);
 
     const url = `/dashboard/chart-data?${queryParams.toString()}`;
@@ -135,7 +176,7 @@ export class DashboardService {
   // Get user activity summary
   async getUserActivitySummary(
     filters?: DashboardFilters,
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<UserActivitySummary>> {
     const params = new URLSearchParams();
 
     if (filters?.dateRange) {
@@ -144,19 +185,19 @@ export class DashboardService {
     }
 
     const url = `/dashboard/user-activity-summary?${params.toString()}`;
-    return apiRequest.get<any>(url);
+    return apiRequest.get<UserActivitySummary>(url);
   }
 
   // Get system health status
-  async getSystemHealth(): Promise<ApiResponse<any>> {
+  async getSystemHealth(): Promise<ApiResponse<SystemHealth>> {
     const url = "/dashboard/system-health";
-    return apiRequest.get<any>(url);
+    return apiRequest.get<SystemHealth>(url);
   }
 
   // Get performance metrics
   async getPerformanceMetrics(
     filters?: DashboardFilters,
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<PerformanceMetrics>> {
     const params = new URLSearchParams();
 
     if (filters?.dateRange) {
@@ -169,7 +210,7 @@ export class DashboardService {
     }
 
     const url = `/dashboard/performance-metrics?${params.toString()}`;
-    return apiRequest.get<any>(url);
+    return apiRequest.get<PerformanceMetrics>(url);
   }
 
   // Export dashboard report
@@ -194,9 +235,9 @@ export class DashboardService {
   }
 
   // Get real-time updates (for WebSocket implementation)
-  async getRealTimeUpdates(): Promise<ApiResponse<any>> {
+  async getRealTimeUpdates(): Promise<ApiResponse<RealTimeUpdate[]>> {
     const url = "/dashboard/real-time-updates";
-    return apiRequest.get<any>(url);
+    return apiRequest.get<RealTimeUpdate[]>(url);
   }
 
   // Subscribe to real-time updates

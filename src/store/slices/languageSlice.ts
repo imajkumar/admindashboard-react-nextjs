@@ -65,7 +65,7 @@ const languageSlice = createSlice({
     // Add available language
     addLanguage: (state, action: PayloadAction<LanguageConfig>) => {
       const existingIndex = state.availableLanguages.findIndex(
-        (lang: any) => lang.code === action.payload.code,
+        (lang) => lang.code === action.payload.code,
       );
 
       if (existingIndex >= 0) {
@@ -78,7 +78,7 @@ const languageSlice = createSlice({
     // Remove language
     removeLanguage: (state, action: PayloadAction<string>) => {
       state.availableLanguages = state.availableLanguages.filter(
-        (lang: any) => lang.code !== action.payload,
+        (lang) => lang.code !== action.payload,
       );
 
       // If removed language was current, fallback to default
